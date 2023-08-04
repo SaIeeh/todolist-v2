@@ -61,13 +61,32 @@ app.get("/", function (req, res) {
 // Handle post request for deleting an item
 app.post("/delete", function (req, res) {
   const checkedItemId = req.body.checkbox;
-  // Find the item by ID and remove it from the database
-  Item.findByIdAndRemove(checkedItemId).then(function () {
-    console.log("Item deleted successfully!.");
-    res.redirect("/");
-  }).catch(function (error) {
-    console.log(error);
-  });
+  const listName = req.body.listName;
+
+  // Determine whether it's a custom list or the default list
+  if (listName === "Today") {
+    // Delete the item from the default list and redirect to the home page
+    Item.findByIdAndRemove(checkedItemId)
+      .then(() => {
+        console.log("Item deleted successfully!.");
+        res.redirect("/");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  } else {
+    // Delete the item from the custom list and redirect back to the custom list page
+    List.findOneAndUpdate(
+      { name: listName },
+      { $pull: { items: { _id: checkedItemId } } }
+    )
+      .then(() => {
+        res.redirect("/" + listName);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 });
 
 // Handle post request for adding a new item
