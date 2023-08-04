@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
 const app = express();
 
 // Connect to the MongoDB database
-mongoose.connect('mongodb://127.0.0.1:27017/todolistDB', { useNewUrlParser: true });
+mongoose.connect('mongodb+srv://9looo7y77:LxIixJ97pee9ZPo3@cluster0.k9ud5p3.mongodb.net/todolistDB', { useNewUrlParser: true });
 
 // Define the Mongoose schema for items
 const itemsSchema = {
